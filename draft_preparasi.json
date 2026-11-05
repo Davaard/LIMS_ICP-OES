@@ -1,0 +1,60 @@
+{
+    "MIX A": [
+        [
+            {
+                "no_sampel": "1",
+                "logam": [
+                    "Fe",
+                    "Mn",
+                    "Mo",
+                    "Sn",
+                    "Ti",
+                    "Zn",
+                    "Ba",
+                    "Cd",
+                    "Co",
+                    "Cr",
+                    "Cu",
+                    "Ni",
+                    "Pb",
+                    "Al"
+                ]
+            }
+        ]
+    ],
+    "MIX B": [
+        [
+            {
+                "no_sampel": "1",
+                "logam": [
+                    "Hg",
+                    "As",
+                    "Se",
+                    "Sb"
+                ]
+            }
+        ]
+    ],
+    "BORON": [
+        [
+            {
+                "no_sampel": "1",
+                "logam": [
+                    "B"
+                ]
+            },
+            {
+                "no_sampel": "2",
+                "logam": [
+                    "B"
+                ]
+            },
+            {
+                "no_sampel": "3",
+                "logam": [
+                    "B"
+                ]
+            }
+        ]
+    ]
+}

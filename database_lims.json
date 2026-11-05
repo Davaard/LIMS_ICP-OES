@@ -1,0 +1,489 @@
+{
+    "data_preparasi": [
+        {
+            "no_sampel": "805.1",
+            "logam": [
+                "Fe",
+                "Mn",
+                "Mo",
+                "Sn",
+                "Ti",
+                "Zn",
+                "Ba",
+                "Cd",
+                "Co",
+                "Cr",
+                "Cu",
+                "Ni",
+                "Pb",
+                "Al",
+                "B",
+                "Hg",
+                "As",
+                "Se",
+                "Sb"
+            ]
+        },
+        {
+            "no_sampel": "805.16",
+            "logam": [
+                "Fe",
+                "Mn",
+                "Mo",
+                "Sn",
+                "Ti",
+                "Zn",
+                "Ba",
+                "Cd",
+                "Co",
+                "Cr",
+                "Cu",
+                "Ni",
+                "Pb",
+                "Al",
+                "B",
+                "Hg",
+                "As",
+                "Se",
+                "Sb"
+            ]
+        },
+        {
+            "no_sampel": "805.17",
+            "logam": [
+                "Fe",
+                "Mn",
+                "Mo",
+                "Sn",
+                "Ti",
+                "Zn",
+                "Ba",
+                "Cd",
+                "Co",
+                "Cr",
+                "Cu",
+                "Ni",
+                "Pb",
+                "Al",
+                "B",
+                "Hg",
+                "As",
+                "Se",
+                "Sb"
+            ]
+        },
+        {
+            "no_sampel": "805.18",
+            "logam": [
+                "Fe",
+                "Mn",
+                "Mo",
+                "Sn",
+                "Ti",
+                "Zn",
+                "Ba",
+                "Cd",
+                "Co",
+                "Cr",
+                "Cu",
+                "Ni",
+                "Pb",
+                "Al",
+                "B",
+                "Hg",
+                "As",
+                "Se",
+                "Sb"
+            ]
+        },
+        {
+            "no_sampel": "810.1",
+            "logam": [
+                "Fe",
+                "Mn",
+                "Mo",
+                "Sn",
+                "Ti",
+                "Zn",
+                "Ba",
+                "Cd",
+                "Co",
+                "Cr",
+                "Cu",
+                "Ni",
+                "Pb",
+                "Al",
+                "B",
+                "Hg",
+                "As",
+                "Se",
+                "Sb"
+            ]
+        },
+        {
+            "no_sampel": "810.2",
+            "logam": [
+                "Fe",
+                "Mn",
+                "Mo",
+                "Sn",
+                "Ti",
+                "Zn",
+                "Ba",
+                "Cd",
+                "Co",
+                "Cr",
+                "Cu",
+                "Ni",
+                "Pb",
+                "Al",
+                "B",
+                "Hg",
+                "As",
+                "Se",
+                "Sb"
+            ]
+        },
+        {
+            "no_sampel": "810.3",
+            "logam": [
+                "Fe",
+                "Mn",
+                "Mo",
+                "Sn",
+                "Ti",
+                "Zn",
+                "Ba",
+                "Cd",
+                "Co",
+                "Cr",
+                "Cu",
+                "Ni",
+                "Pb",
+                "Al",
+                "B",
+                "Hg",
+                "As",
+                "Se",
+                "Sb"
+            ]
+        },
+        {
+            "no_sampel": "810.4",
+            "logam": [
+                "Fe",
+                "Mn",
+                "Mo",
+                "Sn",
+                "Ti",
+                "Zn",
+                "Ba",
+                "Cd",
+                "Co",
+                "Cr",
+                "Cu",
+                "Ni",
+                "Pb",
+                "Al",
+                "B",
+                "Hg",
+                "As",
+                "Se",
+                "Sb"
+            ]
+        }
+    ],
+    "work_order_final": {
+        "MIX A": [
+            [
+                {
+                    "no_sampel": "805.1",
+                    "logam": [
+                        "Fe",
+                        "Mn",
+                        "Mo",
+                        "Sn",
+                        "Ti",
+                        "Zn",
+                        "Ba",
+                        "Cd",
+                        "Co",
+                        "Cr",
+                        "Cu",
+                        "Ni",
+                        "Pb",
+                        "Al"
+                    ]
+                },
+                {
+                    "no_sampel": "805.16",
+                    "logam": [
+                        "Fe",
+                        "Mn",
+                        "Mo",
+                        "Sn",
+                        "Ti",
+                        "Zn",
+                        "Ba",
+                        "Cd",
+                        "Co",
+                        "Cr",
+                        "Cu",
+                        "Ni",
+                        "Pb",
+                        "Al"
+                    ]
+                },
+                {
+                    "no_sampel": "805.17",
+                    "logam": [
+                        "Fe",
+                        "Mn",
+                        "Mo",
+                        "Sn",
+                        "Ti",
+                        "Zn",
+                        "Ba",
+                        "Cd",
+                        "Co",
+                        "Cr",
+                        "Cu",
+                        "Ni",
+                        "Pb",
+                        "Al"
+                    ]
+                },
+                {
+                    "no_sampel": "805.18",
+                    "logam": [
+                        "Fe",
+                        "Mn",
+                        "Mo",
+                        "Sn",
+                        "Ti",
+                        "Zn",
+                        "Ba",
+                        "Cd",
+                        "Co",
+                        "Cr",
+                        "Cu",
+                        "Ni",
+                        "Pb",
+                        "Al"
+                    ]
+                },
+                {
+                    "no_sampel": "810.1",
+                    "logam": [
+                        "Fe",
+                        "Mn",
+                        "Mo",
+                        "Sn",
+                        "Ti",
+                        "Zn",
+                        "Ba",
+                        "Cd",
+                        "Co",
+                        "Cr",
+                        "Cu",
+                        "Ni",
+                        "Pb",
+                        "Al"
+                    ]
+                }
+            ],
+            [
+                {
+                    "no_sampel": "810.2",
+                    "logam": [
+                        "Fe",
+                        "Mn",
+                        "Mo",
+                        "Sn",
+                        "Ti",
+                        "Zn",
+                        "Ba",
+                        "Cd",
+                        "Co",
+                        "Cr",
+                        "Cu",
+                        "Ni",
+                        "Pb",
+                        "Al"
+                    ]
+                },
+                {
+                    "no_sampel": "810.3",
+                    "logam": [
+                        "Fe",
+                        "Mn",
+                        "Mo",
+                        "Sn",
+                        "Ti",
+                        "Zn",
+                        "Ba",
+                        "Cd",
+                        "Co",
+                        "Cr",
+                        "Cu",
+                        "Ni",
+                        "Pb",
+                        "Al"
+                    ]
+                },
+                {
+                    "no_sampel": "810.4",
+                    "logam": [
+                        "Fe",
+                        "Mn",
+                        "Mo",
+                        "Sn",
+                        "Ti",
+                        "Zn",
+                        "Ba",
+                        "Cd",
+                        "Co",
+                        "Cr",
+                        "Cu",
+                        "Ni",
+                        "Pb",
+                        "Al"
+                    ]
+                }
+            ]
+        ],
+        "MIX B": [
+            [
+                {
+                    "no_sampel": "805.1",
+                    "logam": [
+                        "Hg",
+                        "As",
+                        "Se",
+                        "Sb"
+                    ]
+                },
+                {
+                    "no_sampel": "805.16",
+                    "logam": [
+                        "Hg",
+                        "As",
+                        "Se",
+                        "Sb"
+                    ]
+                },
+                {
+                    "no_sampel": "805.17",
+                    "logam": [
+                        "Hg",
+                        "As",
+                        "Se",
+                        "Sb"
+                    ]
+                },
+                {
+                    "no_sampel": "805.18",
+                    "logam": [
+                        "Hg",
+                        "As",
+                        "Se",
+                        "Sb"
+                    ]
+                },
+                {
+                    "no_sampel": "810.1",
+                    "logam": [
+                        "Hg",
+                        "As",
+                        "Se",
+                        "Sb"
+                    ]
+                }
+            ],
+            [
+                {
+                    "no_sampel": "810.2",
+                    "logam": [
+                        "Hg",
+                        "As",
+                        "Se",
+                        "Sb"
+                    ]
+                },
+                {
+                    "no_sampel": "810.3",
+                    "logam": [
+                        "Hg",
+                        "As",
+                        "Se",
+                        "Sb"
+                    ]
+                },
+                {
+                    "no_sampel": "810.4",
+                    "logam": [
+                        "Hg",
+                        "As",
+                        "Se",
+                        "Sb"
+                    ]
+                }
+            ]
+        ],
+        "BORON": [
+            [
+                {
+                    "no_sampel": "805.1",
+                    "logam": [
+                        "B"
+                    ]
+                },
+                {
+                    "no_sampel": "805.16",
+                    "logam": [
+                        "B"
+                    ]
+                },
+                {
+                    "no_sampel": "805.17",
+                    "logam": [
+                        "B"
+                    ]
+                },
+                {
+                    "no_sampel": "805.18",
+                    "logam": [
+                        "B"
+                    ]
+                },
+                {
+                    "no_sampel": "810.1",
+                    "logam": [
+                        "B"
+                    ]
+                }
+            ],
+            [
+                {
+                    "no_sampel": "810.2",
+                    "logam": [
+                        "B"
+                    ]
+                },
+                {
+                    "no_sampel": "810.3",
+                    "logam": [
+                        "B"
+                    ]
+                },
+                {
+                    "no_sampel": "810.4",
+                    "logam": [
+                        "B"
+                    ]
+                }
+            ]
+        ]
+    },
+    "status_selesai": {}
+}
