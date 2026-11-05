@@ -14,9 +14,8 @@ st.set_page_config(page_title="LIMS ICP-OES", page_icon="🧪", layout="wide")
 # ==========================================
 def check_password():
     def password_entered():
-        # Mengambil password dari brankas rahasia Streamlit, 
-        # Jika belum disetting, gunakan "megalims2026" sebagai cadangan sementara
-        kunci_rahasia = st.secrets.get("password_lab_mega", "megalims2026")
+        # Mengambil password dari brankas rahasia Streamlit,
+        kunci_rahasia = st.secrets.get("password_LIMS", "ICPlims2026")
         
         if st.session_state["password"] == kunci_rahasia:
             st.session_state["password_correct"] = True
