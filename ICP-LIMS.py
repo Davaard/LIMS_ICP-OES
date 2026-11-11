@@ -271,14 +271,13 @@ with tab2:
                     # ========================================================
                     
                     # 1. Siapkan kerangka GSheet (Ambil semua sampel, termasuk Blanko/blk)
-                    df_raw_gsheet = pd.DataFrame(index=df_combined.index)
-                    for sampel in df_combined.index:
-                        for logam in df_combined.columns:
-                            df_raw_gsheet.at[sampel, logam] = df_combined.at[sampel, logam]
+                    df_raw_gsheet = df_combined.copy() # Lebih cepat dan aman dari memori collision
                     
                     # 2. Siapkan kerangka Final Report (Hanya ambil yang ada di Work Order)
                     sampel_yg_diproses = [s for s in df_combined.index if str(s) in wo_flat]
-                    df_final = pd.DataFrame(index=sampel_yg_diproses)
+                    
+                    # FIX: Inisialisasi kolom dengan dtype=object agar tidak bentrok string vs float
+                    df_final = pd.DataFrame(index=sampel_yg_diproses, columns=df_combined.columns, dtype=object)
                     
                     for sampel in sampel_yg_diproses:
                         logam_diminta = wo_flat.get(str(sampel), set())
@@ -295,6 +294,9 @@ with tab2:
                                     df_final.at[sampel, logam] = f"<{limit_str}"
                                 else:
                                     df_final.at[sampel, logam] = round(nilai, 4)
+                    
+                    # Bersihkan kolom logam yang tidak dipesan sama sekali, lalu isi sisa sel kosong dengan "N/A"
+                    df_final = df_final.dropna(axis=1, how='all').fillna("N/A")
                     
                     kolom_tersedia = [k for k in KOLOM_STANDAR if k in df_final.columns]
                     df_final = df_final[kolom_tersedia]
