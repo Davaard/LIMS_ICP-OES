@@ -285,7 +285,7 @@ with tab2:
                                 limit = LIMIT_DETEKSI.get(logam, 0)
                                 
                                 if pd.isna(nilai):
-                                    df_final.at[sampel, logam] = "N/A"
+                                    df_final.at[sampel, logam] = " "
                                 elif nilai < limit:
                                     # UBAH TITIK JADI KOMA KHUSUS TEKS (< LIMIT)
                                     limit_str = str(limit).replace('.', ',')
@@ -294,7 +294,7 @@ with tab2:
                                     df_final.at[sampel, logam] = round(nilai, 4)
                     
                     # Bersihkan logam yang 100% kosong lalu isi sisa sel dengan N/A
-                    df_final = df_final.dropna(axis=1, how='all').fillna("N/A")
+                    df_final = df_final.dropna(axis=1, how='all').fillna(" ")
                     
                     kolom_tersedia = [k for k in KOLOM_STANDAR if k in df_final.columns]
                     df_final = df_final[kolom_tersedia]
