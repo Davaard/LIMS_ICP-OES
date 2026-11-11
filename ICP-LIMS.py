@@ -333,10 +333,35 @@ with tab2:
                             if kategori in dict_gsheet:
                                 df_sheet = dict_gsheet[kategori]
                                 
-                                available_metals = [l for l in logam_list if l in df_sheet.columns]
-                                df_mix = df_sheet[['No_Sampel'] + available_metals].copy()
-                                df_mix.rename(columns={'No_Sampel': 'Sampel'}, inplace=True)
+                                # 💡 FILTER 1: Hanya izinkan Sampel Work Order dan Blanko ('std' & 'cal' dibuang)
+                                kata_kunci_sistem = ['blk', 'blank']
+                                mask_valid = df_sheet['No_Sampel'].apply(
+                                    lambda x: str(x) in wo_flat or any(k in str(x).lower() for k in kata_kunci_sistem)
+                                )
+                                df_sheet_filtered = df_sheet[mask_valid].copy()
                                 
+                                # 💡 FILTER 2: Kumpulkan daftar logam apa saja yang BENAR-BENAR dipesan di sheet ini
+                                logam_dipesan = set()
+                                for s in df_sheet_filtered['No_Sampel']:
+                                    if str(s) in wo_flat:
+                                        logam_dipesan.update(wo_flat[str(s)])
+                                
+                                # 💡 FILTER 3: Hancurkan kolom logam yang tidak dipesan sama sekali oleh batch ini
+                                available_metals = [l for l in logam_list if l in df_sheet_filtered.columns and l in logam_dipesan]
+                                df_mix = df_sheet_filtered[['No_Sampel'] + available_metals].copy()
+                                
+                                # 💡 FILTER 4: Jika ada sampel kombinasi, kosongkan nilai logam yang tidak ia pesan
+                                # (Blanko akan dibiarkan tetap menampilkan angka untuk semua logam yang tersisa)
+                                for idx in df_mix.index:
+                                    sampel = str(df_mix.at[idx, 'No_Sampel'])
+                                    if sampel in wo_flat:
+                                        logam_diminta = wo_flat[sampel]
+                                        for logam in available_metals:
+                                            if logam not in logam_diminta:
+                                                df_mix.at[idx, logam] = None
+                                
+                                # Rapikan penamaan kolom untuk output Excel
+                                df_mix.rename(columns={'No_Sampel': 'Sampel'}, inplace=True)
                                 df_mix.insert(0, 'No', range(1, len(df_mix) + 1))
                                 df_mix.to_excel(writer, sheet_name=kategori, index=False)
                             else:
