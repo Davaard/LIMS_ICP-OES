@@ -271,12 +271,10 @@ with tab2:
                     # ========================================================
                     
                     # 1. Siapkan kerangka GSheet (Ambil semua sampel, termasuk Blanko/blk)
-                    df_raw_gsheet = df_combined.copy() # Lebih cepat dan aman dari memori collision
+                    df_raw_gsheet = df_combined.copy()
                     
                     # 2. Siapkan kerangka Final Report (Hanya ambil yang ada di Work Order)
                     sampel_yg_diproses = [s for s in df_combined.index if str(s) in wo_flat]
-                    
-                    # FIX: Inisialisasi kolom dengan dtype=object agar tidak bentrok string vs float
                     df_final = pd.DataFrame(index=sampel_yg_diproses, columns=df_combined.columns, dtype=object)
                     
                     for sampel in sampel_yg_diproses:
@@ -295,15 +293,17 @@ with tab2:
                                 else:
                                     df_final.at[sampel, logam] = round(nilai, 4)
                     
-                    # Bersihkan kolom logam yang tidak dipesan sama sekali, lalu isi sisa sel kosong dengan "N/A"
+                    # Bersihkan logam yang 100% kosong lalu isi sisa sel dengan N/A
                     df_final = df_final.dropna(axis=1, how='all').fillna("N/A")
                     
                     kolom_tersedia = [k for k in KOLOM_STANDAR if k in df_final.columns]
                     df_final = df_final[kolom_tersedia]
                     
-                    st.success(f"✓ Berhasil mengekstrak {len(df_final)} Sampel dari {len(file_csvs)} file CSV.")
+                    st.success(f"✅ Berhasil mengekstrak {len(df_final)} Sampel dari {len(file_csvs)} file CSV.")
                     st.markdown("### 📊 Preview Data")
-                    st.dataframe(df_final, use_container_width=True)
+                    
+                    # 💡 FIX UTAMA: Paksa tabel menjadi string HANYA saat tampil di web agar PyArrow tidak crash!
+                    st.dataframe(df_final.astype(str), use_container_width=True)
                     
                     # ----------------------------------------------------
                     # ALGORITMA PENYUSUNAN 2 JENIS EXCEL (FINAL & GSHEET)
