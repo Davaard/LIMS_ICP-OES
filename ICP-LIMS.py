@@ -241,21 +241,46 @@ with tab2:
         if file_csvs:
             with st.spinner("Memproses seluruh file CSV..."):
                 try:
-                    all_dfs = []
+                    all_dfs_for_report = []
+                    dict_gsheet = {} # Menyimpan data kronologis asli per mesin
+                    
                     for f_csv in file_csvs:
                         df_raw = pd.read_csv(f_csv, header=None, on_bad_lines='skip', low_memory=False)
-                        df_unk = df_raw[df_raw[1] == "UNK"].copy()
                         
-                        df_unk[9] = pd.to_numeric(df_unk[9], errors='coerce') # Filter Kolom 9 (Optimum)
-                        df_opt = df_unk[df_unk[9] == 1].copy()
+                        # 💡 BUG FIX 1: Indikator Optimum Wavelength ada di Kolom 15, BUKAN Kolom 9
+                        df_raw[15] = pd.to_numeric(df_raw[15], errors='coerce') 
+                        df_opt = df_raw[df_raw[15] == 1].copy()
                         
-                        df_clean = df_opt[[2, 6, 11]].copy()
-                        df_clean.columns = ["No_Sampel", "Logam", "Konsentrasi"]
+                        # Ambil Sampel (2), Waktu (3), Logam (6), Konsentrasi (11)
+                        df_clean = df_opt[[2, 3, 6, 11]].copy()
+                        df_clean.columns = ["No_Sampel", "Waktu", "Logam", "Konsentrasi"]
                         df_clean["Konsentrasi"] = pd.to_numeric(df_clean["Konsentrasi"], errors='coerce')
-                        df_pivot = df_clean.pivot_table(index="No_Sampel", columns="Logam", values="Konsentrasi", aggfunc='first')
-                        all_dfs.append(df_pivot)
+                        
+                        # 💡 BUG FIX 2: Pivot menggunakan "Waktu" & "No_Sampel" agar BLK yang berulang tetap terpisah
+                        df_pivot = df_clean.pivot_table(index=["Waktu", "No_Sampel"], columns="Logam", values="Konsentrasi", aggfunc='first').reset_index()
+                        
+                        # Urutkan secara ketat berdasarkan Waktu aktual (Kronologis Autosampler)
+                        df_pivot['Waktu_DT'] = pd.to_datetime(df_pivot['Waktu'], errors='coerce')
+                        df_pivot = df_pivot.sort_values('Waktu_DT').drop(columns=['Waktu_DT'])
+                        
+                        # Deteksi file CSV ini milik kategori apa (MIX A, MIX B, atau BORON)
+                        kategori_file = "UNKNOWN"
+                        for kat, logam_list in DICT_LOGAM.items():
+                            if any(l in df_pivot.columns for l in logam_list):
+                                kategori_file = kat
+                                break
+                                
+                        # Simpan versi utuh (kronologis) khusus untuk Raw GSheet
+                        dict_gsheet[kategori_file] = df_pivot.copy()
+                        
+                        # Siapkan tabel untuk Final Report (Buang waktu, gabungkan duplikat)
+                        df_for_report = df_pivot.drop(columns=['Waktu']).groupby('No_Sampel').first()
+                        all_dfs_for_report.append(df_for_report)
                     
-                    df_combined = pd.concat(all_dfs)
+                    # ----------------------------------------------------
+                    # PERSIAPAN TABEL: FINAL REPORT (GABUNGAN KETAT)
+                    # ----------------------------------------------------
+                    df_combined = pd.concat(all_dfs_for_report)
                     df_combined = df_combined.groupby(df_combined.index).first() 
                     
                     wo_flat = {}
@@ -266,14 +291,6 @@ with tab2:
                                 if s not in wo_flat: wo_flat[s] = set()
                                 wo_flat[s].update(item["logam"])
                     
-                    # ========================================================
-                    # PEMISAHAN LOGIKA: FINAL REPORT (KETAT) & GSHEET (BEBAS)
-                    # ========================================================
-                    
-                    # 1. Siapkan kerangka GSheet (Ambil semua sampel, termasuk Blanko/blk)
-                    df_raw_gsheet = df_combined.copy()
-                    
-                    # 2. Siapkan kerangka Final Report (Hanya ambil yang ada di Work Order)
                     sampel_yg_diproses = [s for s in df_combined.index if str(s) in wo_flat]
                     df_final = pd.DataFrame(index=sampel_yg_diproses, columns=df_combined.columns, dtype=object)
                     
@@ -287,54 +304,49 @@ with tab2:
                                 if pd.isna(nilai):
                                     df_final.at[sampel, logam] = " "
                                 elif nilai < limit:
-                                    # UBAH TITIK JADI KOMA KHUSUS TEKS (< LIMIT)
                                     limit_str = str(limit).replace('.', ',')
                                     df_final.at[sampel, logam] = f"<{limit_str}"
                                 else:
                                     df_final.at[sampel, logam] = round(nilai, 4)
                     
-                    # Bersihkan logam yang 100% kosong lalu isi sisa sel dengan N/A
                     df_final = df_final.dropna(axis=1, how='all').fillna(" ")
-                    
                     kolom_tersedia = [k for k in KOLOM_STANDAR if k in df_final.columns]
                     df_final = df_final[kolom_tersedia]
                     
                     st.success(f"✅ Berhasil mengekstrak {len(df_final)} Sampel dari {len(file_csvs)} file CSV.")
-                    st.markdown("### 📊 Preview Data")
-                    
-                    # 💡 FIX UTAMA: Paksa tabel menjadi string HANYA saat tampil di web agar PyArrow tidak crash!
+                    st.markdown("### 📊 Preview Data Final Report")
                     st.dataframe(df_final.astype(str), use_container_width=True)
                     
                     # ----------------------------------------------------
                     # ALGORITMA PENYUSUNAN 2 JENIS EXCEL (FINAL & GSHEET)
                     # ----------------------------------------------------
                     
-                    # 1. Excel Laporan Akhir (PDF Format)
+                    # 1. Excel Laporan Akhir (Cetak PDF)
                     buffer_final = io.BytesIO()
                     with pd.ExcelWriter(buffer_final, engine='xlsxwriter') as writer:
                         df_final.to_excel(writer, sheet_name='Reported Result')
                         
-                    # 2. Excel Raw Data (GSheet Format) - 3 Sheet Terpisah
+                    # 2. Excel Raw Data (Format GSheet - Mempertahankan Urutan Blanko/Blk)
                     buffer_raw = io.BytesIO()
                     with pd.ExcelWriter(buffer_raw, engine='xlsxwriter') as writer:
                         for kategori, logam_list in DICT_LOGAM.items():
-                            available_metals = [l for l in logam_list if l in df_raw_gsheet.columns]
-                            
-                            if not available_metals: # Jika kosong, buat sheet kosong
-                                df_sheet = pd.DataFrame(columns=['No', 'Sampel'] + logam_list)
-                            else:
-                                df_mix = df_raw_gsheet[available_metals].copy()
-                                df_mix = df_mix.dropna(how='all') # Buang baris yang kosong semua di mix ini
-                                df_mix = df_mix.reindex(columns=logam_list) # Urutkan presisi sesuai GSheet
+                            if kategori in dict_gsheet:
+                                df_sheet = dict_gsheet[kategori]
                                 
-                                # Tambahkan kolom No & Sampel di depan
-                                df_mix.insert(0, 'Sampel', df_mix.index)
+                                available_metals = [l for l in logam_list if l in df_sheet.columns]
+                                df_mix = df_sheet[['No_Sampel'] + available_metals].copy()
+                                df_mix.rename(columns={'No_Sampel': 'Sampel'}, inplace=True)
+                                
                                 df_mix.insert(0, 'No', range(1, len(df_mix) + 1))
-                                df_sheet = df_mix
-                                
-                            df_sheet.to_excel(writer, sheet_name=kategori, index=False)
+                                df_mix.to_excel(writer, sheet_name=kategori, index=False)
+                            else:
+                                # Jika tidak ada unggahan file CSV untuk kategori ini
+                                df_sheet = pd.DataFrame(columns=['No', 'Sampel'] + logam_list)
+                                df_sheet.to_excel(writer, sheet_name=kategori, index=False)
                     
+                    # ----------------------------------------------------
                     # TAMPILAN 2 TOMBOL DOWNLOAD
+                    # ----------------------------------------------------
                     st.markdown("### 📥 Download Hasil Ekstraksi")
                     col_dl1, col_dl2 = st.columns(2)
                     with col_dl1:
