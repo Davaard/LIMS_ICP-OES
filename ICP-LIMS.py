@@ -141,7 +141,7 @@ with tab1:
             st.markdown("### 📋 Daftar Antrian Saat Ini")
         with col_t2:
             st.markdown("<div style='margin-top: 15px;'></div>", unsafe_allow_html=True)
-            if st.button("🔄 Sinkronkan Layar", use_container_width=True):
+            if st.button("🔄 Refresh", use_container_width=True):
                 st.rerun() # Memaksa aplikasi berkedip dan menarik data JSON terbaru
 
         df_antrian = pd.DataFrame(st.session_state.data_preparasi)
