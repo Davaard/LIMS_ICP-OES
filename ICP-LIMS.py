@@ -90,12 +90,11 @@ def save_db():
 st.title("🧪 LIMS ICP-OES Terintegrasi")
 st.markdown("Sistem Manajemen Informasi Laboratorium (Preparasi & Ekstraksi Data Otomatis)")
 
-if "init" not in st.session_state:
-    db_awal = load_db()
-    st.session_state.data_preparasi = db_awal["data_preparasi"]
-    st.session_state.work_order_final = db_awal["work_order_final"]
-    st.session_state.status_selesai = db_awal["status_selesai"]
-    st.session_state.init = True
+# SINKRONISASI LIVE: Selalu tarik data terbaru dari JSON setiap ada aktivitas
+db_terkini = load_db()
+st.session_state.data_preparasi = db_terkini["data_preparasi"]
+st.session_state.work_order_final = db_terkini["work_order_final"]
+st.session_state.status_selesai = db_terkini["status_selesai"]
 
 tab1, tab2 = st.tabs(["📋 Sesi 1: Preparasi & Work Order", "📈 Sesi 2: Data Ingestion & Report"])
 
@@ -135,7 +134,16 @@ with tab1:
 
     if st.session_state.data_preparasi:
         st.markdown("---")
-        st.markdown("### 📋 Daftar Antrian Saat Ini")
+        
+        # Desain layout tombol sinkronisasi sejajar dengan judul
+        col_t1, col_t2 = st.columns([4, 1])
+        with col_t1:
+            st.markdown("### 📋 Daftar Antrian Saat Ini")
+        with col_t2:
+            st.markdown("<div style='margin-top: 15px;'></div>", unsafe_allow_html=True)
+            if st.button("🔄 Sinkronkan Layar", use_container_width=True):
+                st.rerun() # Memaksa aplikasi berkedip dan menarik data JSON terbaru
+
         df_antrian = pd.DataFrame(st.session_state.data_preparasi)
         st.dataframe(df_antrian, use_container_width=True)
         
